@@ -22,7 +22,7 @@ function createMarkup(arr) {
 }
 
 function handleClick(event) {
-    
+  event.preventDefault();
   if (event.target.nodeName !== "IMG") {
     return;
   }
@@ -34,19 +34,20 @@ function handleClick(event) {
 <img src="${imgSource}">
 </div>
 `,
-{
-    onShow: (instance) => 
     {
-        document.addEventListener("keydown", function (event) 
-        {
-            if (event.keyCode == 27 && instance.visible())
-             {
-                instance.close(); 
-            }
-        }
-        );
-    },
-}
+      onShow: (instance) => {
+        document.addEventListener("keydown", closeModalOnEscape);
+      },
+      onClose: () => {
+        document.removeEventListener("keydown", closeModalOnEscape);
+      },
+    }
   );
   instance.show();
+
+  function closeModalOnEscape(event) {
+    if (event.keyCode == 27) {
+      instance.close();
+    }
+  }
 }
